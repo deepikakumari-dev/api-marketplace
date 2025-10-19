@@ -1,8 +1,40 @@
 import React from 'react'
+import { Button } from './ui/button'
+import Link from 'next/link'
 
 function Header() {
+  const navs = [
+    {
+      name: 'Marketplace',
+      link: '/'
+    },
+    {
+      name: 'Dashboard',
+      link: '/dashboard'
+    },
+    {
+      name: 'Orgs',
+      link: '/orgs'
+    },
+  ]
   return (
-    <div>Header</div>
+    <div className='border-b flex items-center justify-between p-3 h-18'>
+      <div>
+        <h1 className=''>DK<span className='font-bold'>API</span></h1>
+      </div>
+      <div className='flex gap-3 items-center'>
+        <ul className='flex gap-3'>
+          {navs.map((n, i) => (
+            <Link href={n.link} key={i}>{n.name}</Link>
+          ))}
+        </ul>
+        <div>
+          <Link href={'/auth/signin'}>
+          <Button className=''>Signin</Button>
+          </Link>
+        </div>
+      </div>
+    </div>
   )
 }
 

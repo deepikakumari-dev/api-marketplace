@@ -6,3 +6,4 @@ function APIs() {
   )
 }
 
+export default APIs

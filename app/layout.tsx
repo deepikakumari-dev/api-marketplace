@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "API Marketplace",
+  title: "DKAPI",
   description: "Open-Source API marketplace for everyone.",
 };
 
@@ -32,7 +32,9 @@ export default function RootLayout({
       >
         <Provider>
           <Header />
-          {children}
+          <div className="container">
+            {children}
+          </div>
           <Footer />
         </Provider>
       </body>
