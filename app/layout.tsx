@@ -5,7 +5,6 @@ import 'flowbite'
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Provider from "@/components/providers/SessionProvider";
-import Hero from "@/components/home/Hero";
 
 
 const geistSans = Geist({
@@ -35,8 +34,7 @@ export default function RootLayout({
       >
         <Provider>
           <Header />
-          <Hero />
-          <div className="container mx-auto p-2">
+          <div className="container mx-auto px-2">
             {children}
           </div>
           <Footer />
