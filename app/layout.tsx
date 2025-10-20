@@ -4,6 +4,8 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Provider from "@/components/providers/SessionProvider";
+import 'flowbite'
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

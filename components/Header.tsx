@@ -17,10 +17,11 @@ function Header() {
       link: '/orgs'
     },
   ]
+
   return (
-    <div className='border-b flex items-center justify-between p-3 h-18'>
+    <div className='border-b flex items-center justify-between p-3 h-18 text-sm'>
       <div>
-        <h1 className=''>DK<span className='font-bold'>API</span></h1>
+        <h1 className='text-lg'>DK<span className='font-bold'>API</span></h1>
       </div>
       <div className='flex gap-3 items-center'>
         <ul className='flex gap-3'>
@@ -30,7 +31,7 @@ function Header() {
         </ul>
         <div>
           <Link href={'/auth/signin'}>
-          <Button className=''>Signin</Button>
+            <Button className=''>Signin</Button>
           </Link>
         </div>
       </div>
