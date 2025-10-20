@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button } from './ui/button'
 import Link from 'next/link'
+import { Input } from './ui/input'
 
 function Header() {
   const navs = [
@@ -22,6 +23,9 @@ function Header() {
     <div className='border-b flex items-center justify-between p-3 h-18 text-sm'>
       <div>
         <h1 className='text-lg'>DK<span className='font-bold'>API</span></h1>
+      </div>
+      <div className='w-full mx-10'>
+          <Input placeholder='Search' />
       </div>
       <div className='flex gap-3 items-center'>
         <ul className='flex gap-3'>

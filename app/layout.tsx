@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import 'flowbite'
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Provider from "@/components/providers/SessionProvider";
-import 'flowbite'
+import Hero from "@/components/home/Hero";
 
 
 const geistSans = Geist({
@@ -34,7 +35,8 @@ export default function RootLayout({
       >
         <Provider>
           <Header />
-          <div className="container">
+          <Hero />
+          <div className="container mx-auto p-2">
             {children}
           </div>
           <Footer />
