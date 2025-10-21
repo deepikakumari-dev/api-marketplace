@@ -9,11 +9,23 @@ function FeaturedAPIs() {
       <h1 className='text-xl font-semibold mb-4'>Featured APIs</h1>
       <div className='grid lg:grid-cols-5 md:grid-cols-4 grid-cols-3 gap-3 text-sm'>
         <Link href={''}>
-          <Card className='shadow-none rounded'>
+          <Card className='shadow-none rounded gap-2'>
             <CardHeader>
+              <div className='flex items-center gap-2'>
+                <div className="w-10 h-10 rounded-full border overflow-hidden flex items-center justify-center">
+                  <img
+                    src="https://flowbite-react.com/favicon.svg"
+                    alt=""
+                    className="max-w-full max-h-full object-contain"
+                  />
+                </div>
 
-              <CardTitle>Image Hosting API</CardTitle>
-              <CardDescription className='text-[10px]'>By <Link href={'/'} className='hover:underline transition duration-300 '>DeepikaK</Link></CardDescription>
+                <div className=''>
+
+                  <CardTitle>Image Hosting API</CardTitle>
+                  <CardDescription className='text-[10px]'>By <Link href={'/'} className='hover:underline transition duration-300 '>DeepikaK</Link></CardDescription>
+                </div>
+              </div>
             </CardHeader>
             <CardContent>
               <div>

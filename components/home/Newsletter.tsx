@@ -12,7 +12,7 @@ function Newsletter() {
         </div>
         <div className='flex gap-3 w-full'>
           <TextInput className='w-full' id="email4" type="email" placeholder="name@dkapi.com" required />
-          <Button color={'alternative'}>Send</Button>
+          <Button color={'alternative'}>Join</Button>
         </div>
       </div>
     </div>

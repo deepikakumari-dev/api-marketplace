@@ -50,7 +50,7 @@ function SignIn() {
                             <p>Already have an account - </p>
                             <Link href={'/auth/signin'} className='font-bold hover:underline '>Signin</Link>
                         </div>
-                    </div>
+                    </div>8
                 </CardFooter>
             </Card>
         </div>
