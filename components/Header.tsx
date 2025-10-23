@@ -17,7 +17,7 @@ function Header() {
   const navs = [
     {
       name: 'Marketplace',
-      link: '/'
+      link: '/hub'
     },
     {
       name: 'Dashboard',
