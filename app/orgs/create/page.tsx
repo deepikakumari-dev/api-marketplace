@@ -116,6 +116,7 @@ function page() {
               name="name"
               value={formData.name}
               onChange={handleFieldChange}
+              required
             />
           </div>
           <div className="grid flex-1 gap-2 w-full">
@@ -127,6 +128,7 @@ function page() {
               name="description"
               value={formData.description}
               onChange={(e) => handleFieldChange(e)}
+              required
             />
           </div>
           <div className="flex-1 gap-2 flex flex-col relative">
@@ -136,7 +138,7 @@ function page() {
             {image && <span onClick={() => setImage('')} className="z-50 absolute top-0 rounded bg-white p-0.5 right-[-5px]"><X className="h-3" /></span>}
             <div
               onClick={handleimageSelect} className="h-20 w-20 rounded border cursor-pointer relative ">
-              {uploading ? <Loader2 className={"flex items-center justify-center w-full h-full"} size={14} /> : <img src={image || 'https://flowbite-react.com/favicon.svg'} className="h-full w-full object-contain" alt="post_image" />}
+              {uploading ? <Loader2 className={"flex items-center justify-center w-full h-full animate-spin"} size={14} /> : <img src={image || 'https://flowbite-react.com/favicon.svg'} className="h-full w-full object-contain" alt="post_image" />}
             </div>
             <input
               id="image"
@@ -148,8 +150,8 @@ function page() {
             />
           </div>
         </div>
-        <Button>{loading ? <Loader2 className='animate-spin' /> : 'Create'}</Button>
-        <p>{error}</p>
+        <Button disabled={uploading || loading || formData.name == '' || formData.description == ''}>{loading ? <Loader2 className='animate-spin' /> : 'Create'}</Button>
+        <p className='mt-2 text-red-500 text-xs'>{error}</p>
       </form>
     </div>
   )
