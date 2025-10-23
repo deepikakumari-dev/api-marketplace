@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from '@/components/ui/input'
 import { Label } from 'flowbite-react'
 import Link from 'next/link'
-import { signIn } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 import { Loader } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 
@@ -17,6 +17,19 @@ function SignInPage() {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
     const router = useRouter()
+
+    const { data: session, status } = useSession()
+
+    if (status == "loading") {
+        return (
+            <div className='w-full h-[90vh] flex justify-center items-center'>
+                <Loader className='animate-spin' />
+            </div>
+        )
+    } else if (status == 'authenticated') {
+        router.push('/dashboard')
+        return;
+    }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()

@@ -5,8 +5,9 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from '@/components/ui/input'
 import { Label } from 'flowbite-react'
 import Link from 'next/link'
-import { signIn } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 import { Loader } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 
 function RegisterPage() {
     const [formData, setFormData] = useState({
@@ -18,6 +19,20 @@ function RegisterPage() {
     })
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
+    const router = useRouter()
+
+    const {data: session, status} = useSession()
+
+    if (status == "loading") {
+        return (
+            <div className='w-full h-[90vh] flex justify-center items-center'>
+                <Loader className='animate-spin' />
+            </div>
+        )
+    } else if (status == 'authenticated') {
+        router.push('/dashboard')
+        return;
+    }
 
     const handleFormDataChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target
@@ -33,6 +48,7 @@ function RegisterPage() {
         setError('')
         if (formData.password !== formData.confirmPassword) {
             setError("Password didn't match, sorry :(")
+            setLoading(false)
             return;
         }
         try {
@@ -44,12 +60,14 @@ function RegisterPage() {
                 body: JSON.stringify(formData)
             })
             const data = await res.json()
+            console.log(data)
             if (data.success) {
                 await signIn('credentials', {
                     redirect: false,
                     email: formData.email,
-                    password: formData.confirmPassword
+                    password: formData.password
                 })
+                router.push('/dashboard')
             } else {
                 setError(data.error)
             }
@@ -100,7 +118,8 @@ function RegisterPage() {
                 <CardFooter>
                     <div className=''>
                         <Button type='submit' disabled={Object.values(formData).some(d => d == '')}>{loading ? <Loader className='animate-spin' /> : 'Register'}</Button>
-                        <div className='text-sm flex gap-1 mt-2'>
+                        <p className='text-xs text-red-500 mt-2 truncate max-w-sm'>{error}</p>
+                        <div className='text-sm flex gap-1 '>
                             <p>Already have an account - </p>
                             <Link href={'/auth/signin'} className='font-bold hover:underline '>Signin</Link>
                         </div>
