@@ -7,12 +7,14 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <div className="w-full">
+    <>
       <Hero />
-      <FeaturedAPIs />
-      <APIsByCategory />
-      <Reviews />
-      <Newsletter />
-    </div>
+      <div className="w-full container mx-auto px-2">
+        <FeaturedAPIs />
+        <APIsByCategory />
+        <Reviews />
+        <Newsletter />
+      </div>
+    </>
   );
 }

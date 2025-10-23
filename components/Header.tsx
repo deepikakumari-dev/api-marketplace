@@ -1,9 +1,19 @@
+'use client'
 import React from 'react'
 import { Button } from './ui/button'
 import Link from 'next/link'
 import { Input } from './ui/input'
+import { usePathname } from 'next/navigation'
+import { signOut, useSession } from 'next-auth/react'
+
+import { Dropdown, DropdownDivider, DropdownHeader, DropdownItem } from "flowbite-react";
+import { HiCog, HiCurrencyDollar, HiLogout, HiViewGrid } from "react-icons/hi";
+import { Loader2 } from 'lucide-react'
+
 
 function Header() {
+  const pathname = usePathname()
+  const { data: session, status } = useSession()
   const navs = [
     {
       name: 'Marketplace',
@@ -19,8 +29,16 @@ function Header() {
     },
   ]
 
+  const userProfile = <button className="w-10 h-10 rounded-full border overflow-hidden flex items-center justify-center cursor-pointer">
+    <img
+      src="https://flowbite-react.com/favicon.svg"
+      alt=""
+      className="max-w-full max-h-full object-contain"
+    />
+  </button>
+
   return (
-    <div className='sticky border-b flex items-center justify-between p-3 h-18 text-sm'>
+    <div className=' border-b flex items-center justify-between p-3 h-18 text-sm'>
       <div>
         <h1 className='text-lg'>DK<span className='font-bold'>API</span></h1>
       </div>
@@ -30,13 +48,29 @@ function Header() {
       <div className='flex gap-3 items-center'>
         <ul className='flex gap-3'>
           {navs.map((n, i) => (
-            <Link href={n.link} key={i}>{n.name}</Link>
+            <Link href={n.link} key={i} className={`${pathname.split('/')[1] == (n.link.split('/')[1]) ? 'bg-gray-100' : ''}  px-2 py-1 rounded`}>{n.name}</Link>
           ))}
         </ul>
         <div>
-          <Link href={'/auth/signin'}>
+          {status == "unauthenticated" ? <Link href={'/auth/signin'}>
             <Button>Signin</Button>
           </Link>
+            : status == "authenticated" ? <div>
+              <Dropdown label={userProfile} inline className='text-xs '>
+                <DropdownHeader>
+                  <span className="block">{session.user.name}</span>
+                  <span className="block truncate opacity-70">{session.user.email}</span>
+                </DropdownHeader>
+                <DropdownItem icon={HiViewGrid}>Dashboard</DropdownItem>
+                <DropdownItem icon={HiCog}>Settings</DropdownItem>
+                <DropdownItem icon={HiCurrencyDollar}>Earnings</DropdownItem>
+                <DropdownDivider />
+                <DropdownItem icon={HiLogout} onClick={signOut}>Sign out</DropdownItem>
+              </Dropdown>
+
+            </div>
+              : <Loader2 className='animate-spin' />
+          }
         </div>
       </div>
     </div>
