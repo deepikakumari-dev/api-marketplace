@@ -39,9 +39,9 @@ function Header() {
 
   return (
     <div className=' border-b flex items-center justify-between p-3 h-18 text-sm'>
-      <div>
+      <Link href={'/'}>
         <h1 className='text-lg'>DK<span className='font-bold'>API</span></h1>
-      </div>
+      </Link>
       <div className='w-full mx-10'>
         <Input placeholder='Search' />
       </div>

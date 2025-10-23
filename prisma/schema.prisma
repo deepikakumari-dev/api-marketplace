@@ -22,6 +22,7 @@ model User {
   membersOfOrgs UserOrganization[]
 
   organization Organization[]
+  apis API[]
 
   @@map("users")
 }
@@ -80,24 +81,62 @@ model Organization {
   creatorId   String  @db.ObjectId
   creator     User    @relation(fields: [creatorId], references: [id])
   members UserOrganization[]
+
+  @@map("organization")
 }
 
 model API {
   id               String   @id @default(auto()) @map("_id") @db.ObjectId
   name             String
+  slug             String   @unique
   shortDescription String
   longDescription  String
-  slug  String
-  
+  logo             String?
   categoryId       String   @db.ObjectId
   category         Category @relation(fields: [categoryId], references: [id])
+  ownerId          String   @db.ObjectId
+  owner            User     @relation(fields: [ownerId], references: [id])
+
+  baseUrl          String
+  pricingPlanIds   String[]
+  endpoints        APIEndpoint[]
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@map("apis")
 }
+
+model APIEndpoint {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  apiId          String   @db.ObjectId
+  api            API      @relation(fields: [apiId], references: [id], onDelete: Cascade)
+
+  name           String
+  path           String
+  method         String
+  description    String?
+  exampleRequest Json?
+  exampleResponse Json?
+
+  authRequired   Boolean  @default(true)
+  rateLimit      Int?     
+  visibility     String   @default("public")
+  version        String   @default("v1")
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@map("api_endpoints")
+}
+
 
 model Category {
   id          String @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   description String
   apis        API[]
+  @@map("category")
 }
 
 model UserOrganization {
