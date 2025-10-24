@@ -20,27 +20,25 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        const existing = await prisma.user.findUnique({ where: { email } });
-        if (existing) {
-            return NextResponse.json(
-                { success: false, error: "Email already registered." },
-                { status: 409 }
-            );
-        }
-
-        // hash the password
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        const user = await prisma.user.create({
+        const data = await prisma.organization.create({
             data: {
-                name: firstName + ' ' + lastName,
-                email,
-                password: hashedPassword,
-            },
-        });
+                name,
+                description,
+                image: imageUrl,
+                creatorId: session.user.id
+            }
+        })
+
+        await prisma.userOrganization.create({
+            data: {
+                organizationId: data.id,
+                userId: session.user.id,
+                role: 'admin'
+            }
+        })
 
         return NextResponse.json(
-            { success: true, user: { id: user.id, email: user.email, name: user.name } },
+            { success: true, data},
             { status: 201 }
         );
     } catch (e: any) {
