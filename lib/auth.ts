@@ -6,15 +6,15 @@ import bcrypt from 'bcrypt'
 
 export const authOptions: AuthOptions = {
     adapter: PrismaAdapter(prisma),
-    session: {strategy: "jwt"},
+    session: { strategy: "jwt" },
     providers: [
         CredentialsProvider({
             name: "Credentials",
             credentials: {
-                email: {label: 'Email', type: 'email'},
-                password: {label: "Password", type: 'password'}
+                email: { label: 'Email', type: 'email' },
+                password: { label: "Password", type: 'password' }
             },
-            async authorize(credentials){
+            async authorize(credentials) {
                 if (credentials) {
                     const user = await prisma.user.findUnique({
                         where: {
@@ -34,18 +34,27 @@ export const authOptions: AuthOptions = {
         signIn: "/auth/signin"
     },
     callbacks: {
-        async jwt({token, user}) {
+        async jwt({ token, user, trigger, session }) {
             if (user) {
                 token.id = user.id
                 token.email = user.email
                 token.name = user.name
-
+                const org = await prisma.userOrganization.findFirst({
+                    where: { userId: user.id }
+                })
+                token.activeOrgId = org?.organizationId
             }
+
+            if (trigger === "update" && session?.user?.activeOrgId) {
+                token.activeOrgId = session.user.activeOrgId
+            }
+
             return token
         },
-        async session({session, token}){
+        async session({ session, token }) {
             if (token && session.user) {
                 session.user.id = token.id
+                session.user.activeOrgId = token.activeOrgId
             }
             return session
         }

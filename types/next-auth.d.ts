@@ -4,7 +4,7 @@ declare module "next-auth" {
     interface Session {
         user: {
             id: string
-
+            activeOrgId: string | undefined
         } & DefaultSession["user"]
     }
 
@@ -16,5 +16,6 @@ declare module "next-auth" {
 declare module "next-auth/jwt" {
     interface JWT {
         id: string
+        activeOrgId: string | undefined
     }
 }

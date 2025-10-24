@@ -5,15 +5,25 @@ import Link from 'next/link'
 import { Input } from './ui/input'
 import { usePathname } from 'next/navigation'
 import { signOut, useSession } from 'next-auth/react'
-
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Dropdown, DropdownDivider, DropdownHeader, DropdownItem } from "flowbite-react";
 import { HiCog, HiCurrencyDollar, HiLogout, HiViewGrid } from "react-icons/hi";
 import { Loader2 } from 'lucide-react'
 
 
-function Header() {
+function Header({ orgs }: {
+  orgs: any[]
+}) {
   const pathname = usePathname()
-  const { data: session, status } = useSession()
+  const { data: session, status, update } = useSession()
   const navs = [
     {
       name: 'Marketplace',
@@ -29,13 +39,20 @@ function Header() {
     },
   ]
 
-  const userProfile = <button className="w-10 h-10 rounded-full border overflow-hidden flex items-center justify-center cursor-pointer">
+  const userProfile = <div className="w-10 h-10 rounded-full border overflow-hidden flex items-center justify-center cursor-pointer">
     <img
       src="https://flowbite-react.com/favicon.svg"
       alt=""
       className="max-w-full max-h-full object-contain"
     />
-  </button>
+  </div>
+
+  async function changeOrg(orgId: string) {
+    await update({
+      user: { ...session?.user, activeOrgId: orgId }
+    })
+  }
+
 
   return (
     <div className=' border-b flex items-center justify-between p-3 h-18 text-sm'>
@@ -51,11 +68,29 @@ function Header() {
             <Link href={n.link} key={i} className={`${pathname.split('/')[1] == (n.link.split('/')[1]) ? 'bg-gray-100' : ''}  px-2 py-1 rounded`}>{n.name}</Link>
           ))}
         </ul>
-        <div>
+        <div className='flex items-center'>
           {status == "unauthenticated" ? <Link href={'/auth/signin'}>
             <Button>Signin</Button>
           </Link>
-            : status == "authenticated" ? <div>
+            : status == "authenticated" ? <div className='flex gap-3 items-center'>
+              <Select defaultValue={session?.user.activeOrgId} onValueChange={(value) => {
+                changeOrg(value)
+              }}>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Select a org" />
+                </SelectTrigger>
+                <SelectContent >
+                  <SelectGroup>
+                    {orgs.map((org, i) => (<SelectItem key={i} value={org.organizationId}><div className="w-6 h-6 rounded-full border overflow-hidden flex items-center justify-center cursor-pointer">
+                      <img
+                        src={org.organization.image || "https://flowbite-react.com/favicon.svg"}
+                        alt=""
+                        className="max-w-full max-h-full object-contain"
+                      />
+                    </div>{org.organization.name}</SelectItem>))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
               <Dropdown label={userProfile} inline className='text-xs '>
                 <DropdownHeader>
                   <span className="block">{session.user.name}</span>
