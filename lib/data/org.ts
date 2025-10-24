@@ -5,6 +5,9 @@ export const getUserOrganizations = async (userId: string) => {
         const orgs = await prisma.userOrganization.findMany({
             where: {
                 userId
+            },
+            include: {
+                organization: true
             }
         })
 

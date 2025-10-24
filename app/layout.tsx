@@ -5,6 +5,7 @@ import 'flowbite'
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Provider from "@/components/providers/SessionProvider";
+import { Toaster } from "@/components/ui/sonner";
 
 
 const geistSans = Geist({
@@ -39,6 +40,7 @@ export default function RootLayout({
           </div>
           <Footer />
         </Provider>
+        <Toaster />
       </body>
     </html>
   );
