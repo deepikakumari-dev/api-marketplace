@@ -16,3 +16,20 @@ export const getUserOrganizations = async (userId: string) => {
         return e.message
     }
 }
+
+
+export const getOrganizationMembers = async (orgId: string) => {
+    try {
+        const members = await prisma.userOrganization.findMany({
+            where: {
+                organizationId: orgId
+            },
+            include: {
+                user: true
+            }
+        })
+        return members
+    } catch(e: any) {
+        return e.message
+    }
+}
