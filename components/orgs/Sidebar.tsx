@@ -39,9 +39,8 @@ function OrgSidebar() {
         }
     ]
     return (
-        <div className='border-r h-[90vh] w-xs'>
-            <div className=''>
-
+        <div className='h-[90vh] w-80 relative'>
+            <div className='border-r h-full w-80 fixed overflow-y-auto'>
                 {navs.map((n, i) => (
                     <Link key={i} href={n.slug == pathname ? '#' : n.slug} className={`p-3 text-sm flex space-x-2 items-center ${pathname == n.slug ? 'bg-gray-100' : ''}`}>
                         <span className='opacity-70'>{n.logo}</span>

@@ -55,57 +55,59 @@ function Header({ orgs }: {
 
 
   return (
-    <div className=' border-b flex items-center justify-between p-3 h-18 text-sm'>
-      <Link href={'/'}>
-        <h1 className='text-lg'>DK<span className='font-bold'>API</span></h1>
-      </Link>
-      <div className='w-full mx-10'>
-        <Input placeholder='Search' />
-      </div>
-      <div className='flex gap-3 items-center'>
-        <ul className='flex gap-3'>
-          {navs.map((n, i) => (
-            <Link href={n.link} key={i} className={`${pathname.split('/')[1] == (n.link.split('/')[1]) ? 'bg-gray-100' : ''}  px-2 py-1 rounded`}>{n.name}</Link>
-          ))}
-        </ul>
-        <div className='flex items-center'>
-          {status == "unauthenticated" ? <Link href={'/auth/signin'}>
-            <Button>Signin</Button>
-          </Link>
-            : status == "authenticated" ? <div className='flex gap-3 items-center'>
-              <Select defaultValue={session?.user.activeOrgId} onValueChange={(value) => {
-                changeOrg(value)
-              }}>
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Select a org" />
-                </SelectTrigger>
-                <SelectContent >
-                  <SelectGroup>
-                    {orgs.map((org, i) => (<SelectItem key={i} value={org.organizationId}><div className="w-6 h-6 rounded-full border overflow-hidden flex items-center justify-center cursor-pointer">
-                      <img
-                        src={org.organization.image || "https://flowbite-react.com/favicon.svg"}
-                        alt=""
-                        className="max-w-full max-h-full object-contain"
-                      />
-                    </div>{org.organization.name}</SelectItem>))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-              <Dropdown label={userProfile} inline className='text-xs '>
-                <DropdownHeader>
-                  <span className="block">{session.user.name}</span>
-                  <span className="block truncate opacity-70">{session.user.email}</span>
-                </DropdownHeader>
-                <DropdownItem icon={HiViewGrid}>Dashboard</DropdownItem>
-                <DropdownItem icon={HiCog}>Settings</DropdownItem>
-                <DropdownItem icon={HiCurrencyDollar}>Earnings</DropdownItem>
-                <DropdownDivider />
-                <DropdownItem icon={HiLogout} onClick={signOut}>Sign out</DropdownItem>
-              </Dropdown>
+    <div className='z-50 h-18 relative w-full '>
+      <div className=' border-b flex items-center justify-between p-3 text-sm fixed w-full bg-white'>
+        <Link href={'/'}>
+          <h1 className='text-lg'>DK<span className='font-bold'>API</span></h1>
+        </Link>
+        <div className='w-full mx-10'>
+          <Input placeholder='Search' />
+        </div>
+        <div className='flex gap-3 items-center'>
+          <ul className='flex gap-3'>
+            {navs.map((n, i) => (
+              <Link href={n.link} key={i} className={`${pathname.split('/')[1] == (n.link.split('/')[1]) ? 'bg-gray-100' : ''}  px-2 py-1 rounded`}>{n.name}</Link>
+            ))}
+          </ul>
+          <div className='flex items-center'>
+            {status == "unauthenticated" ? <Link href={'/auth/signin'}>
+              <Button>Signin</Button>
+            </Link>
+              : status == "authenticated" ? <div className='flex gap-3 items-center'>
+                <Select defaultValue={session?.user.activeOrgId} onValueChange={(value) => {
+                  changeOrg(value)
+                }}>
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Select a org" />
+                  </SelectTrigger>
+                  <SelectContent >
+                    <SelectGroup>
+                      {orgs.map((org, i) => (<SelectItem key={i} value={org.organizationId}><div className="w-6 h-6 rounded-full border overflow-hidden flex items-center justify-center cursor-pointer">
+                        <img
+                          src={org.organization.image || "https://flowbite-react.com/favicon.svg"}
+                          alt=""
+                          className="max-w-full max-h-full object-contain"
+                        />
+                      </div>{org.organization.name}</SelectItem>))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+                <Dropdown label={userProfile} inline className='text-xs '>
+                  <DropdownHeader>
+                    <span className="block">{session.user.name}</span>
+                    <span className="block truncate opacity-70">{session.user.email}</span>
+                  </DropdownHeader>
+                  <DropdownItem icon={HiViewGrid}>Dashboard</DropdownItem>
+                  <DropdownItem icon={HiCog}>Settings</DropdownItem>
+                  <DropdownItem icon={HiCurrencyDollar}>Earnings</DropdownItem>
+                  <DropdownDivider />
+                  <DropdownItem icon={HiLogout} onClick={signOut}>Sign out</DropdownItem>
+                </Dropdown>
 
-            </div>
-              : <Loader2 className='animate-spin' />
-          }
+              </div>
+                : <Loader2 className='animate-spin' />
+            }
+          </div>
         </div>
       </div>
     </div>

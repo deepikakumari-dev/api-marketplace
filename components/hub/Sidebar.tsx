@@ -19,9 +19,10 @@ function HubSidebar() {
     'Finance', 'Crypto', 'Social', 'Gaming', 'Music',
     'Weather', 'Maps', 'News', 'Sports', 'Health'
   ];
+
   return (
-    <div className='border-r h-[90vh] w-xs overflow-y-auto'>
-      <div className=''>
+    <div className='h-[90vh] w-80 relative'>
+      <div className='border-r h-full w-64 fixed overflow-y-auto w-50'>
 
         {navs.map((n, i) => (
           <Link key={i} href={n.slug == pathname ? '#' : n.slug} className={`p-3 text-sm flex space-x-2 items-center ${pathname == n.slug ? 'bg-gray-100' : ''}`}>
