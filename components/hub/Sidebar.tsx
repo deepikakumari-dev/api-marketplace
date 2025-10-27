@@ -22,7 +22,7 @@ function HubSidebar() {
 
   return (
     <div className='h-[90vh] w-80 relative'>
-      <div className='border-r h-full w-64 fixed overflow-y-auto w-50'>
+      <div className='border-r h-full w-64 fixed overflow-y-auto'>
 
         {navs.map((n, i) => (
           <Link key={i} href={n.slug == pathname ? '#' : n.slug} className={`p-3 text-sm flex space-x-2 items-center ${pathname == n.slug ? 'bg-gray-100' : ''}`}>

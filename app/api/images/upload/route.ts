@@ -15,10 +15,8 @@ export async function POST(req: NextRequest) {
       {
         method: "POST",
         headers: {
-          "x-rapidapi-host":
-            "upload-images-hosting-get-url.p.rapidapi.com",
+          "x-rapidapi-host": "upload-images-hosting-get-url.p.rapidapi.com",
           "x-rapidapi-key": process.env.RAPIDAPI_KEY!,
-          // Do NOT set Content-Type manually, fetch will set it for FormData
         },
         body: formData,
       }
