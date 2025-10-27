@@ -34,7 +34,7 @@ function CreateOrgPage({ orgs }: {
     const router = useRouter()
 
     const handleimageSelect = () => {
-        inputRef.current?.click()
+        (inputRef.current as any).click()
     }
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {

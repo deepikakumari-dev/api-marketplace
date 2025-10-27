@@ -39,7 +39,7 @@ function OrgSidebar() {
         }
     ]
     return (
-        <div className='border-r border-t h-[90vh] w-xs'>
+        <div className='border-r h-[90vh] w-xs'>
             <div className=''>
 
                 {navs.map((n, i) => (

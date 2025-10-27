@@ -8,10 +8,10 @@ async function layout({ children }: {
     children: React.ReactNode
 }) {
 
-      const session = await getServerSession(authOptions)
-      if (!session || !session.user) {
+    const session = await getServerSession(authOptions)
+    if (!session || !session.user) {
         redirect('/auth/signin')
-      }
+    }
     return (
         <div className='flex'>
             <OrgSidebar />
