@@ -7,7 +7,8 @@ export const getOrganizationAPIs = async (orgId: string) => {
                 orgId
             }
         })
+        return apis
     } catch (e: any) {
-        return e.message
+        return []
     }
 }

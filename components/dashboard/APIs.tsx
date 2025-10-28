@@ -1,13 +1,114 @@
 import React from 'react'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card'
+import Link from 'next/link'
+import { Clock, Plus, ShieldCheck, TrendingUp } from 'lucide-react'
+import { Badge } from 'flowbite-react'
+import { Button } from '../ui/button'
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
+import { Input } from '../ui/input'
+import { Label } from '../ui/label'
 
-function APIs({apis}:{
+function APIs({ apis }: {
     apis: any[]
 }) {
     return (
         <div>
-            <div>
-                <h1 className='font-semibold text-2xl'>APIs</h1>
+            <div className=''>
+                <div className=' flex justify-between mr-3'>
+                    <h1 className='font-semibold text-2xl'>APIs</h1>
+                    <div>
+                        <Dialog>
+                            <form>
+                                <DialogTrigger asChild>
+                                    <Button variant="outline">Add API</Button>
+                                </DialogTrigger>
+                                <DialogContent className="sm:max-w-[425px]">
+                                    <DialogHeader>
+                                        <DialogTitle>Create API</DialogTitle>
+                                        <DialogDescription>
+                                            Create a new API to sell it on this platform.
+                                        </DialogDescription>
+                                    </DialogHeader>
+                                    <div className="grid gap-4">
+                                        <div className="grid gap-3">
+                                            <Label htmlFor="name-1">Name</Label>
+                                            <Input id="name-1" name="name" />
+                                        </div>
+                                        <div className="grid gap-3">
+                                            <Label htmlFor="slub-1">slug</Label>
+                                            <Input id="slug-1" name="slug" />
+                                        </div>
+                                    </div>
+                                    <DialogFooter>
+                                        <DialogClose asChild>
+                                            <Button variant="outline">Cancel</Button>
+                                        </DialogClose>
+                                        <Button type="submit">Create</Button>
+                                    </DialogFooter>
+                                </DialogContent>
+                            </form>
+                        </Dialog>
+
+                    </div>
+                </div>
+                <div className='flex text-sm flex-wrap p-3'>
+                    {apis.map((a, i) => <Link href={''}>
+                        <Card className='shadow-none rounded gap-2 py-2 max-w-md'>
+                            <CardHeader className='px-0'>
+                                <div className='px-2 w-fit'>
+                                    <Badge color='gray'>Media</Badge>
+                                </div>
+                                <div className='flex items-center gap-2 px-6'>
+                                    <div className="w-10 h-10 rounded-full border overflow-hidden flex items-center justify-center">
+                                        <img
+                                            src="https://flowbite-react.com/favicon.svg"
+                                            alt=""
+                                            className="max-w-full max-h-full object-contain"
+                                        />
+                                    </div>
+
+                                    <div className=''>
+
+                                        <CardTitle>Image Hosting API</CardTitle>
+                                        <CardDescription className='text-[10px]'>By <Link href={'/'} className='hover:underline transition duration-300 '>DeepikaK</Link></CardDescription>
+                                    </div>
+                                </div>
+                            </CardHeader>
+                            <CardContent>
+                                <div>
+                                    Host your images with this API in seconds and get its URL easily.
+                                </div>
+                            </CardContent>
+                            <CardFooter className='opacity-80'>
+                                <div className='flex gap-3 w-full'>
+                                    <div className='rounded border px-1 text-[11px] flex items-center gap-1'>
+                                        <Clock size={11} className='' />
+                                        <span>2778ms</span>
+                                    </div>
+                                    <div className='rounded border px-1 text-[11px] flex items-center gap-1'>
+                                        <TrendingUp size={11} className='' />
+                                        <span>9.8</span>
+                                    </div>
+                                    <div className='rounded border px-1 text-[11px] flex items-center gap-1'>
+                                        <ShieldCheck size={11} className='' />
+                                        <span>100%</span>
+                                    </div>
+                                </div>
+                            </CardFooter>
+                        </Card>
+                    </Link>)}
+                </div>
             </div>
+
         </div>
     )
 }
