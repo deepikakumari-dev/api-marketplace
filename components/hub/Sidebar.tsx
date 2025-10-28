@@ -1,7 +1,7 @@
 'use client'
-import { Cable, Mail, Plus, Settings, ShoppingBag, User, Users } from 'lucide-react'
+import { Network } from 'lucide-react'
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import React from 'react'
 
 function HubSidebar() {
@@ -10,7 +10,7 @@ function HubSidebar() {
     {
       name: 'Hub',
       slug: '/hub',
-      logo: <Cable size={20} />
+      logo: <Network size={20} />
     },
   ]
 

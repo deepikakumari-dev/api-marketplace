@@ -8,7 +8,7 @@ function DashboardSidebar() {
     const pathname = usePathname()
     const navs = [
         {
-            name: 'APis',
+            name: 'APIs',
             slug: '/dashboard/apis',
             logo: <Boxes size={20} />
         },

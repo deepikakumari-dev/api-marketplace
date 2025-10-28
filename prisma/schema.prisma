@@ -81,6 +81,7 @@ model Organization {
   creatorId   String  @db.ObjectId
   creator     User    @relation(fields: [creatorId], references: [id])
   members     UserOrganization[]
+  apis API[]
 
   @@map("organization")
 }
@@ -94,8 +95,10 @@ model API {
   logo             String?
   categoryId       String   @db.ObjectId
   category         Category @relation(fields: [categoryId], references: [id])
-  ownerId          String   @db.ObjectId
-  owner            User     @relation(fields: [ownerId], references: [id])
+  creatorId          String   @db.ObjectId
+  creator            User     @relation(fields: [creatorId], references: [id])
+  orgId String @db.ObjectId
+  organization Organization @relation(fields: [orgId], references: [id])
 
   baseUrl          String
   pricingPlanIds   String[]
@@ -151,4 +154,3 @@ model UserOrganization {
   @@unique([userId, organizationId])
   @@map("user_organizations")
 }
-
