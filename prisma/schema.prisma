@@ -17,12 +17,12 @@ model User {
   accounts      Account[]
   sessions      Session[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
   membersOfOrgs UserOrganization[]
 
   organization Organization[]
-  apis API[]
+  apis         API[]
 
   @@map("users")
 }
@@ -41,7 +41,7 @@ model Account {
   id_token          String? @db.String
   session_state     String?
 
-  createdAt DateTime @default(now()) 
+  createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -74,82 +74,82 @@ model VerificationToken {
 }
 
 model Organization {
-  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  id          String             @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   description String
   image       String?
-  creatorId   String  @db.ObjectId
-  creator     User    @relation(fields: [creatorId], references: [id])
+  creatorId   String             @db.ObjectId
+  creator     User               @relation(fields: [creatorId], references: [id])
   members     UserOrganization[]
-  apis API[]
+  apis        API[]
 
   @@map("organization")
 }
 
 model API {
-  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  id               String       @id @default(auto()) @map("_id") @db.ObjectId
   name             String
-  slug             String   @unique
+  slug             String       @unique
   shortDescription String
-  longDescription  String
+  longDescription  String?
   logo             String?
-  categoryId       String   @db.ObjectId
-  category         Category @relation(fields: [categoryId], references: [id])
-  creatorId          String   @db.ObjectId
-  creator            User     @relation(fields: [creatorId], references: [id])
-  orgId String @db.ObjectId
-  organization Organization @relation(fields: [orgId], references: [id])
+  categoryId       String       @db.ObjectId
+  category         Category     @relation(fields: [categoryId], references: [id])
+  creatorId        String       @db.ObjectId
+  creator          User         @relation(fields: [creatorId], references: [id])
+  orgId            String       @db.ObjectId
+  organization     Organization @relation(fields: [orgId], references: [id])
 
-  baseUrl          String
-  pricingPlanIds   String[]
-  endpoints        APIEndpoint[]
+  baseUrl        String?
+  pricingPlanIds String[]
+  endpoints      APIEndpoint[]
 
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("apis")
 }
 
 model APIEndpoint {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  apiId          String   @db.ObjectId
-  api            API      @relation(fields: [apiId], references: [id], onDelete: Cascade)
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  apiId String @db.ObjectId
+  api   API    @relation(fields: [apiId], references: [id], onDelete: Cascade)
 
-  name           String
-  path           String
-  method         String
-  description    String?
-  exampleRequest Json?
+  name            String
+  path            String
+  method          String
+  description     String?
+  exampleRequest  Json?
   exampleResponse Json?
 
-  authRequired   Boolean  @default(true)
-  rateLimit      Int?     
-  visibility     String   @default("public")
-  version        String   @default("v1")
+  authRequired Boolean @default(true)
+  rateLimit    Int?
+  visibility   String  @default("public")
+  version      String  @default("v1")
 
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("api_endpoints")
 }
-
 
 model Category {
   id          String @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   description String
   apis        API[]
+
   @@map("category")
 }
 
 model UserOrganization {
-  id              String        @id @default(auto()) @map("_id") @db.ObjectId
-  userId          String        @db.ObjectId
-  organizationId  String        @db.ObjectId
-  role            String       @default("member")
+  id             String @id @default(auto()) @map("_id") @db.ObjectId
+  userId         String @db.ObjectId
+  organizationId String @db.ObjectId
+  role           String @default("member")
 
-  user            User          @relation(fields: [userId], references: [id])
-  organization    Organization  @relation(fields: [organizationId], references: [id])
+  user         User         @relation(fields: [userId], references: [id])
+  organization Organization @relation(fields: [organizationId], references: [id])
 
   @@unique([userId, organizationId])
   @@map("user_organizations")

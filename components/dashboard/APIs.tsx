@@ -1,7 +1,8 @@
-import React from 'react'
+'use client'
+import React, { useState } from 'react'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card'
 import Link from 'next/link'
-import { Clock, Plus, ShieldCheck, TrendingUp } from 'lucide-react'
+import { Clock, Loader2, Plus, ShieldCheck, TrendingUp } from 'lucide-react'
 import { Badge } from 'flowbite-react'
 import { Button } from '../ui/button'
 import {
@@ -16,10 +17,36 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from '../ui/input'
 import { Label } from '../ui/label'
+import { Textarea } from '../ui/textarea'
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
+import { useSession } from 'next-auth/react'
 
-function APIs({ apis }: {
-    apis: any[]
+
+function APIs({ apis, orgs, categories }: {
+    apis: any[],
+    orgs: any[],
+    categories: any[]
 }) {
+    const {data: session} = useSession()
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState('')
+    const [formData, setFormData] = useState({
+        name: '',
+        slug: '',
+        description: '',
+        categoryId: '',
+        orgId: session?.user.activeOrgId
+    })
+
+
     return (
         <div>
             <div className=''>
@@ -44,15 +71,58 @@ function APIs({ apis }: {
                                             <Input id="name-1" name="name" />
                                         </div>
                                         <div className="grid gap-3">
-                                            <Label htmlFor="slub-1">slug</Label>
+                                            <Label htmlFor="slub-1">Slug</Label>
                                             <Input id="slug-1" name="slug" />
                                         </div>
+                                        <div className="grid gap-3">
+                                            <Label htmlFor="desc-1">Description</Label>
+                                            <Textarea id="desc-1" name="desc" />
+                                        </div>
+                                        <div>
+                                            <Label htmlFor="cat-1">Category</Label>
+                                            <Select value={formData.categoryId} onValueChange={(value) => {
+                                                setFormData(prev => ({...prev, categoryId: value}))
+                                            }}>
+                                                <SelectTrigger className="w-full mt-3" id='cat-1'>
+                                                    <SelectValue placeholder="Select a category" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectGroup>
+                                                        {categories.map((c, i) => (
+                                                            <SelectItem key={i} value={c.id}>{c.name}</SelectItem>
+                                                        ))}
+                                                    </SelectGroup>
+                                                </SelectContent>
+                                            </Select>
+                                        </div>
+                                        <div>
+                                            <Label id='org-1'>Organization</Label>
+                                            <Select defaultValue={session?.user.activeOrgId} value={formData.orgId} onValueChange={(value) => {
+                                                setFormData(prev => ({...prev, orgId: value}))
+                                            }}>
+                                                <SelectTrigger className="w-full mt-3" id='org-1'>
+                                                    <SelectValue placeholder="Select a org" />
+                                                </SelectTrigger>
+                                                <SelectContent >
+                                                    <SelectGroup>
+                                                        {orgs.map((org, i) => (<SelectItem key={i} value={org.organizationId}><div className="w-6 h-6 rounded-full border overflow-hidden flex items-center justify-center cursor-pointer">
+                                                            <img
+                                                                src={org.organization.image || "https://flowbite-react.com/favicon.svg"}
+                                                                alt=""
+                                                                className="max-w-full max-h-full object-contain"
+                                                            />
+                                                        </div>{org.organization.name}</SelectItem>))}
+                                                    </SelectGroup>
+                                                </SelectContent>
+                                            </Select>
+                                        </div>
+
                                     </div>
                                     <DialogFooter>
                                         <DialogClose asChild>
                                             <Button variant="outline">Cancel</Button>
                                         </DialogClose>
-                                        <Button type="submit">Create</Button>
+                                        <Button disabled={Object.values(formData).some(d => d == '')} type="submit">{loading ?<Loader2 className='animate-spin' /> : 'Create'}</Button>
                                     </DialogFooter>
                                 </DialogContent>
                             </form>
