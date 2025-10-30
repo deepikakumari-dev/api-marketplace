@@ -28,6 +28,8 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { useSession } from 'next-auth/react'
+import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
 
 
 function APIs({ apis, orgs, categories }: {
@@ -43,8 +45,36 @@ function APIs({ apis, orgs, categories }: {
         slug: '',
         description: '',
         categoryId: '',
-        orgId: session?.user.activeOrgId
+        orgId: session?.user.activeOrgId || ''
     })
+    const [isOpen, setIsOpen] = useState(false)
+    const router = useRouter()
+
+    const handleSubmit = async () => {
+        try {
+            setLoading(true)
+            const res = await fetch("/api/api/create", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+
+            const data = await res.json()
+            if (!data.success || !res.ok){
+                toast.error(data.error)
+                return;
+            }
+            toast.success('API created successfully!!!')
+            setIsOpen(false)
+            router.push('/dashboard/apis/' + data.data.id)
+        } catch(e: any) {
+            toast.error('Error occurred :(', {description: e.message})
+        } finally{
+            setLoading(false)
+        }
+    }
 
 
     return (
@@ -53,7 +83,7 @@ function APIs({ apis, orgs, categories }: {
                 <div className=' flex justify-between mr-3'>
                     <h1 className='font-semibold text-2xl'>APIs</h1>
                     <div>
-                        <Dialog>
+                        <Dialog open={isOpen} onOpenChange={setIsOpen}>
                             <form>
                                 <DialogTrigger asChild>
                                     <Button variant="outline">Add API</Button>
@@ -68,15 +98,15 @@ function APIs({ apis, orgs, categories }: {
                                     <div className="grid gap-4">
                                         <div className="grid gap-3">
                                             <Label htmlFor="name-1">Name</Label>
-                                            <Input id="name-1" name="name" />
+                                            <Input id="name-1" name="name" value={formData.name} onChange={(e) => setFormData(prev => ({...prev, name: e.target.value}))} />
                                         </div>
                                         <div className="grid gap-3">
                                             <Label htmlFor="slub-1">Slug</Label>
-                                            <Input id="slug-1" name="slug" />
+                                            <Input id="slug-1" name="slug" value={formData.slug} onChange={(e) => setFormData(prev => ({...prev, slug: e.target.value}))}/>
                                         </div>
                                         <div className="grid gap-3">
                                             <Label htmlFor="desc-1">Description</Label>
-                                            <Textarea id="desc-1" name="desc" />
+                                            <Textarea id="desc-1" name="desc" value={formData.description} onChange={(e) => setFormData(prev => ({...prev, description: e.target.value}))}/>
                                         </div>
                                         <div>
                                             <Label htmlFor="cat-1">Category</Label>
@@ -97,7 +127,7 @@ function APIs({ apis, orgs, categories }: {
                                         </div>
                                         <div>
                                             <Label id='org-1'>Organization</Label>
-                                            <Select defaultValue={session?.user.activeOrgId} value={formData.orgId} onValueChange={(value) => {
+                                            <Select value={formData.orgId} onValueChange={(value) => {
                                                 setFormData(prev => ({...prev, orgId: value}))
                                             }}>
                                                 <SelectTrigger className="w-full mt-3" id='org-1'>
@@ -122,7 +152,7 @@ function APIs({ apis, orgs, categories }: {
                                         <DialogClose asChild>
                                             <Button variant="outline">Cancel</Button>
                                         </DialogClose>
-                                        <Button disabled={Object.values(formData).some(d => d == '')} type="submit">{loading ?<Loader2 className='animate-spin' /> : 'Create'}</Button>
+                                        <Button disabled={Object.values(formData).some(d => d === '')} onClick={handleSubmit} type="submit">{loading ?<Loader2 className='animate-spin' /> : 'Create'}</Button>
                                     </DialogFooter>
                                 </DialogContent>
                             </form>
@@ -131,11 +161,11 @@ function APIs({ apis, orgs, categories }: {
                     </div>
                 </div>
                 <div className='flex text-sm flex-wrap p-3'>
-                    {apis.map((a, i) => <Link href={''}>
-                        <Card className='shadow-none rounded gap-2 py-2 max-w-md'>
+                    {apis.map((a, i) => <Link href={'/apis/' + a.id}>
+                        <Card key={i} className='shadow-none rounded gap-2 py-2 max-w-md'>
                             <CardHeader className='px-0'>
                                 <div className='px-2 w-fit'>
-                                    <Badge color='gray'>Media</Badge>
+                                    <Badge color='gray'>{a.category.name}</Badge>
                                 </div>
                                 <div className='flex items-center gap-2 px-6'>
                                     <div className="w-10 h-10 rounded-full border overflow-hidden flex items-center justify-center">
@@ -148,29 +178,29 @@ function APIs({ apis, orgs, categories }: {
 
                                     <div className=''>
 
-                                        <CardTitle>Image Hosting API</CardTitle>
-                                        <CardDescription className='text-[10px]'>By <Link href={'/'} className='hover:underline transition duration-300 '>DeepikaK</Link></CardDescription>
+                                        <CardTitle>{a.name}</CardTitle>
+                                        <CardDescription className='text-[10px]'>By <Link href={'/orgs/' + a.orgId} className='hover:underline transition duration-300 '>{a.organization.name}</Link></CardDescription>
                                     </div>
                                 </div>
                             </CardHeader>
                             <CardContent>
                                 <div>
-                                    Host your images with this API in seconds and get its URL easily.
+                                    {a.shortDescription}
                                 </div>
                             </CardContent>
                             <CardFooter className='opacity-80'>
                                 <div className='flex gap-3 w-full'>
                                     <div className='rounded border px-1 text-[11px] flex items-center gap-1'>
                                         <Clock size={11} className='' />
-                                        <span>2778ms</span>
+                                        <span>{a.avgLatency || 0}ms</span>
                                     </div>
                                     <div className='rounded border px-1 text-[11px] flex items-center gap-1'>
                                         <TrendingUp size={11} className='' />
-                                        <span>9.8</span>
+                                        <span>{a.score || 0}</span>
                                     </div>
                                     <div className='rounded border px-1 text-[11px] flex items-center gap-1'>
                                         <ShieldCheck size={11} className='' />
-                                        <span>100%</span>
+                                        <span>{a.testScore || 0}%</span>
                                     </div>
                                 </div>
                             </CardFooter>

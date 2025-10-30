@@ -93,6 +93,11 @@ model API {
   shortDescription String
   longDescription  String?
   logo             String?
+  score            Int?         @default(0)
+  avgLatency       Int?         @default(0)
+  testScore        Int?         @default(0)
+  verified         Boolean?     @default(false)
+  featured         Boolean?     @default(false)
   categoryId       String       @db.ObjectId
   category         Category     @relation(fields: [categoryId], references: [id])
   creatorId        String       @db.ObjectId

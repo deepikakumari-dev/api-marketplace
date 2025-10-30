@@ -11,6 +11,7 @@ export async function POST(req: NextRequest) {
         }
 
         const { name, description, categoryId, orgId, slug } = await req.json();
+        console.log(name, description, categoryId,orgId,slug)
 
         if (!name || !description || !categoryId || !orgId || !slug) {
             return NextResponse.json(
