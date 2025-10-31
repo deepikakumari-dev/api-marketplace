@@ -50,7 +50,7 @@ Ther r tonnes of stuff which r not implemented yet, bcoz of procrastination...:(
 
 - Clone this repository:
 ```bash
-git clone https://github.com/furinehigh/DKAPI.git
+git clone https://github.com/deepikakumari-dev/DKAPI.git
 cd DKAPI
 ```
 
