@@ -1,10 +1,10 @@
 import React from 'react'
 
 function page({params}: {
-  params: {id: string}
+    params: {name: string}
 }) {
   return (
-    <div>{params.id}</div>
+    <div>{params.name}</div>
   )
 }
 

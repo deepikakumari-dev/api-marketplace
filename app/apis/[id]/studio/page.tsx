@@ -1,10 +1,11 @@
 import React from 'react'
 
-function page({params}: {
+async function page({params}: {
   params: {id: string}
 }) {
+    const apiID = (await params).id
   return (
-    <div>{params.id}</div>
+    <div>{apiID}</div>
   )
 }
 

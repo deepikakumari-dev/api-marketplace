@@ -161,7 +161,7 @@ function APIs({ apis, orgs, categories }: {
                     </div>
                 </div>
                 <div className='flex text-sm flex-wrap p-3'>
-                    {apis.map((a, i) => <Link href={'/apis/' + a.id}>
+                    {apis.map((a, i) => <Link href={'/apis/' + a.id + '/studio'}>
                         <Card key={i} className='shadow-none rounded gap-2 py-2 max-w-md'>
                             <CardHeader className='px-0'>
                                 <div className='px-2 w-fit'>
@@ -179,7 +179,7 @@ function APIs({ apis, orgs, categories }: {
                                     <div className=''>
 
                                         <CardTitle>{a.name}</CardTitle>
-                                        <CardDescription className='text-[10px]'>By <Link href={'/orgs/' + a.orgId} className='hover:underline transition duration-300 '>{a.organization.name}</Link></CardDescription>
+                                        <CardDescription className='text-[10px]'>By <Link href={'/org/' + a.orgId} className='hover:underline transition duration-300 '>{a.organization.name}</Link></CardDescription>
                                     </div>
                                 </div>
                             </CardHeader>
