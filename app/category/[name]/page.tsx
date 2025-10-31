@@ -4,7 +4,7 @@ function page({params}: {
     params: {name: string}
 }) {
   return (
-    <div>{params.name}</div>
+    <div>{params.name} - coming soon... :)</div>
   )
 }
 
