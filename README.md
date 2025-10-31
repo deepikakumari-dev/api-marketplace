@@ -1,3 +1,5 @@
+[![Athena Award Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Faward.athena.hackclub.com%2Fapi%2Fbadge)](https://award.athena.hackclub.com?utm_source=readme)
+
 # DKAPI
 
 A developer-powered open-source API marketplace, where you can publish, test, and monetize APIs --- or just explore and play with others' endpoints like a real tech nerd.
