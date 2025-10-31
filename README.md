@@ -94,10 +94,7 @@ AI usage was pretty minimal --- I only used ChatGPT to debug or name stuff.
 No Copilot, no autocode magic, just brain + caffeine + vibes.
 (Though if you see something suspiciously elegant, maybe I *did* let AI help a bit 👀)
 
-* * * * *
-
 # Closing Words
-----------------
 
 DKAPI is still evolving, but the goal is simple:
 Make API discovery, testing, and monetization **open, dev-friendly, and beautiful**.
