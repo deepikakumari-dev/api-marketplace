@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card'
 import Link from 'next/link'
 import { Clock, Loader2, Plus, ShieldCheck, TrendingUp } from 'lucide-react'
@@ -32,14 +32,13 @@ import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 
 
-function APIs({ apis, orgs, categories }: {
-    apis: any[],
+function APIs({ orgs, categories }: {
     orgs: any[],
     categories: any[]
 }) {
-    const {data: session} = useSession()
+    const { data: session } = useSession()
     const [loading, setLoading] = useState(false)
-    const [error, setError] = useState('')
+    const [loadingAPIs, setLoadingAPIs] = useState(false)
     const [formData, setFormData] = useState({
         name: '',
         slug: '',
@@ -49,6 +48,34 @@ function APIs({ apis, orgs, categories }: {
     })
     const [isOpen, setIsOpen] = useState(false)
     const router = useRouter()
+    const [apis, setApis] = useState([])
+
+    const fetchOrgAPIs = async () => {
+        setLoadingAPIs(true)
+        try {
+            const res = await fetch(`/api/org/${session?.user.activeOrgId}/apis`)
+            const data = await res.json()
+
+            if (!data.success || !res.ok) {
+                toast.error(data.error)
+                return;
+            }
+
+            setApis(data.apis)
+
+        } catch (e: any) {
+            toast.error("Error occurred!!", { description: e.message })
+        } finally {
+            setLoadingAPIs(false)
+        }
+    }
+
+
+    useEffect(() => {
+        if (!session?.user.activeOrgId) return
+        fetchOrgAPIs()
+    }, [session?.user.activeOrgId])
+
 
     const handleSubmit = async () => {
         try {
@@ -62,18 +89,28 @@ function APIs({ apis, orgs, categories }: {
             })
 
             const data = await res.json()
-            if (!data.success || !res.ok){
+            if (!data.success || !res.ok) {
                 toast.error(data.error)
                 return;
             }
             toast.success('API created successfully!!!')
             setIsOpen(false)
-            router.push('/dashboard/apis/' + data.data.id)
-        } catch(e: any) {
-            toast.error('Error occurred :(', {description: e.message})
-        } finally{
+            router.push('/apis/' + data.data.slug)
+        } catch (e: any) {
+            toast.error('Error occurred :(', { description: e.message })
+        } finally {
             setLoading(false)
         }
+    }
+
+    if (loadingAPIs) {
+        return (
+            <div className='w-full h-[90vh] flex items-center justify-center'>
+                <div>
+                    <Loader2 className='animate-spin'/>
+                </div>
+            </div>
+        )
     }
 
 
@@ -98,20 +135,20 @@ function APIs({ apis, orgs, categories }: {
                                     <div className="grid gap-4">
                                         <div className="grid gap-3">
                                             <Label htmlFor="name-1">Name</Label>
-                                            <Input id="name-1" name="name" value={formData.name} onChange={(e) => setFormData(prev => ({...prev, name: e.target.value}))} />
+                                            <Input id="name-1" name="name" value={formData.name} onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))} />
                                         </div>
                                         <div className="grid gap-3">
                                             <Label htmlFor="slub-1">Slug</Label>
-                                            <Input id="slug-1" name="slug" value={formData.slug} onChange={(e) => setFormData(prev => ({...prev, slug: e.target.value}))}/>
+                                            <Input id="slug-1" name="slug" value={formData.slug} onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value }))} />
                                         </div>
                                         <div className="grid gap-3">
                                             <Label htmlFor="desc-1">Description</Label>
-                                            <Textarea id="desc-1" name="desc" value={formData.description} onChange={(e) => setFormData(prev => ({...prev, description: e.target.value}))}/>
+                                            <Textarea id="desc-1" name="desc" value={formData.description} onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))} />
                                         </div>
                                         <div>
                                             <Label htmlFor="cat-1">Category</Label>
                                             <Select value={formData.categoryId} onValueChange={(value) => {
-                                                setFormData(prev => ({...prev, categoryId: value}))
+                                                setFormData(prev => ({ ...prev, categoryId: value }))
                                             }}>
                                                 <SelectTrigger className="w-full mt-3" id='cat-1'>
                                                     <SelectValue placeholder="Select a category" />
@@ -128,7 +165,7 @@ function APIs({ apis, orgs, categories }: {
                                         <div>
                                             <Label id='org-1'>Organization</Label>
                                             <Select value={formData.orgId} onValueChange={(value) => {
-                                                setFormData(prev => ({...prev, orgId: value}))
+                                                setFormData(prev => ({ ...prev, orgId: value }))
                                             }}>
                                                 <SelectTrigger className="w-full mt-3" id='org-1'>
                                                     <SelectValue placeholder="Select a org" />
@@ -152,7 +189,7 @@ function APIs({ apis, orgs, categories }: {
                                         <DialogClose asChild>
                                             <Button variant="outline">Cancel</Button>
                                         </DialogClose>
-                                        <Button disabled={Object.values(formData).some(d => d === '')} onClick={handleSubmit} type="submit">{loading ?<Loader2 className='animate-spin' /> : 'Create'}</Button>
+                                        <Button disabled={Object.values(formData).some(d => d === '')} onClick={handleSubmit} type="submit">{loading ? <Loader2 className='animate-spin' /> : 'Create'}</Button>
                                     </DialogFooter>
                                 </DialogContent>
                             </form>
@@ -160,51 +197,60 @@ function APIs({ apis, orgs, categories }: {
 
                     </div>
                 </div>
-                <div className='flex text-sm flex-wrap p-3'>
-                    {apis.map((a, i) => <Link href={'/apis/' + a.id + '/studio'}>
+                <div className='flex text-sm flex-wrap p-3 gap-3'>
+                    {apis.map((a: any, i) => <Link href={'/apis/' + a.slug + '/studio'}>
                         <Card key={i} className='shadow-none rounded gap-2 py-2 max-w-md'>
-                            <CardHeader className='px-0'>
-                                <div className='px-2 w-fit'>
-                                    <Badge color='gray'>{a.category.name}</Badge>
-                                </div>
-                                <div className='flex items-center gap-2 px-6'>
-                                    <div className="w-10 h-10 rounded-full border overflow-hidden flex items-center justify-center">
-                                        <img
-                                            src="https://flowbite-react.com/favicon.svg"
-                                            alt=""
-                                            className="max-w-full max-h-full object-contain"
-                                        />
-                                    </div>
+            <CardHeader className='px-0'>
+              <div className='px-2 w-fit'>
+                <Badge color='gray'>{a.category.name}</Badge>
+              </div>
+              <div className='px-6 w-full text-left'>
+                <div className="w-10 h-10 rounded-full border overflow-hidden inline-block align-middle bg-muted">
+                  <img
+                    src={a.image || `https://whatsyour.info/api/v1/avatar/${a.name}`}
+                    alt={a.name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
 
-                                    <div className=''>
+                <div className='inline-block align-middle pl-2 w-[calc(100%-3rem)]'>
+                  <CardTitle>{a.name}</CardTitle>
+                  <CardDescription className='text-[10px]'>
+                    By{" "}
+                    <Link
+                      href={`/org/${a.orgId}`}
+                      className='hover:underline transition duration-300'
+                    >
+                      {a.organization.name}
+                    </Link>
+                  </CardDescription>
+                </div>
+              </div>
 
-                                        <CardTitle>{a.name}</CardTitle>
-                                        <CardDescription className='text-[10px]'>By <Link href={'/org/' + a.orgId} className='hover:underline transition duration-300 '>{a.organization.name}</Link></CardDescription>
-                                    </div>
-                                </div>
-                            </CardHeader>
-                            <CardContent>
-                                <div>
-                                    {a.shortDescription}
-                                </div>
-                            </CardContent>
-                            <CardFooter className='opacity-80'>
-                                <div className='flex gap-3 w-full'>
-                                    <div className='rounded border px-1 text-[11px] flex items-center gap-1'>
-                                        <Clock size={11} className='' />
-                                        <span>{a.avgLatency || 0}ms</span>
-                                    </div>
-                                    <div className='rounded border px-1 text-[11px] flex items-center gap-1'>
-                                        <TrendingUp size={11} className='' />
-                                        <span>{a.score || 0}</span>
-                                    </div>
-                                    <div className='rounded border px-1 text-[11px] flex items-center gap-1'>
-                                        <ShieldCheck size={11} className='' />
-                                        <span>{a.testScore || 0}%</span>
-                                    </div>
-                                </div>
-                            </CardFooter>
-                        </Card>
+
+            </CardHeader>
+            <CardContent>
+              <div className='truncate'>
+                {a.shortDescription}
+              </div>
+            </CardContent>
+            <CardFooter className='opacity-80'>
+              <div className='flex gap-3 w-full'>
+                <div className='rounded border px-1 text-[11px] flex items-center gap-1'>
+                  <Clock size={11} className='' />
+                  <span>{a.avgLatency || 0}ms</span>
+                </div>
+                <div className='rounded border px-1 text-[11px] flex items-center gap-1'>
+                  <TrendingUp size={11} className='' />
+                  <span>{a.score || 0}</span>
+                </div>
+                <div className='rounded border px-1 text-[11px] flex items-center gap-1'>
+                  <ShieldCheck size={11} className='' />
+                  <span>{a.testScore || 0}%</span>
+                </div>
+              </div>
+            </CardFooter>
+          </Card>
                     </Link>)}
                 </div>
             </div>

@@ -11,7 +11,7 @@ function FeaturedAPIs({ apis }: {
   return (
     <div className='mt-5'>
       <h1 className='text-xl font-semibold mb-4'>Featured APIs</h1>
-      <div className='flex text-sm flex-wrap'>
+      <div className='flex text-sm flex-wrap gap-3'>
         {!apis || (apis && apis.length === 0) && (
           <p className='opacity-70 text-sm text-center'>No featured APIs found.</p>
         )}
@@ -21,23 +21,33 @@ function FeaturedAPIs({ apis }: {
               <div className='px-2 w-fit'>
                 <Badge color='gray'>{a.category.name}</Badge>
               </div>
-              <div className='flex items-center gap-2 px-6'>
-                <div className="w-10 h-10 rounded-full border overflow-hidden flex items-center justify-center">
+              <div className='px-6 w-full text-left'>
+                <div className="w-10 h-10 rounded-full border overflow-hidden inline-block align-middle bg-muted">
                   <img
-                    src="https://flowbite-react.com/favicon.svg"
-                    alt=""
-                    className="max-w-full max-h-full object-contain"
+                    src={a.image || `https://whatsyour.info/api/v1/avatar/${a.name}`}
+                    alt={a.name}
+                    className="w-full h-full object-cover"
                   />
                 </div>
 
-                <div className=''>
+                <div className='inline-block align-middle pl-2 w-[calc(100%-3rem)]'>
                   <CardTitle>{a.name}</CardTitle>
-                  <CardDescription className='text-[10px]'>By <Link href={'/org/' + a.orgId} className='hover:underline transition duration-300 '>{a.organization.name}</Link></CardDescription>
+                  <CardDescription className='text-[10px]'>
+                    By{" "}
+                    <Link
+                      href={`/org/${a.orgId}`}
+                      className='hover:underline transition duration-300'
+                    >
+                      {a.organization.name}
+                    </Link>
+                  </CardDescription>
                 </div>
               </div>
+
+
             </CardHeader>
             <CardContent>
-              <div>
+              <div className='truncate'>
                 {a.shortDescription}
               </div>
             </CardContent>

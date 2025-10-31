@@ -97,9 +97,9 @@ function Header({ orgs }: {
                     <span className="block">{session.user.name}</span>
                     <span className="block truncate opacity-70">{session.user.email}</span>
                   </DropdownHeader>
-                  <DropdownItem icon={HiViewGrid}>Dashboard</DropdownItem>
-                  <DropdownItem icon={HiCog}>Settings</DropdownItem>
-                  <DropdownItem icon={HiCurrencyDollar}>Earnings</DropdownItem>
+                  <DropdownItem icon={HiViewGrid} href='/profile'>Profile</DropdownItem>
+                  <DropdownItem icon={HiCog} href='/settings'>Settings</DropdownItem>
+                  <DropdownItem icon={HiCurrencyDollar} href='/settings/payouts'>Payouts</DropdownItem>
                   <DropdownDivider />
                   <DropdownItem icon={HiLogout} onClick={signOut}>Sign out</DropdownItem>
                 </Dropdown>
