@@ -109,6 +109,8 @@ model API {
   baseUrl        String?
   pricingPlanIds String[]
   endpoints      APIEndpoint[]
+  pricingPlans APIPricing[]
+
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -116,28 +118,58 @@ model API {
   @@map("apis")
 }
 
+model APIPricing {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  apiId         String   @db.ObjectId
+  api           API      @relation(fields: [apiId], references: [id], onDelete: Cascade)
+
+  name          String
+  description   String?
+  pricePerMonth Float     @default(0)
+  pricePerRequest Float?  // optional pay-per-use model
+  requestLimit  Int?
+  rateLimit     Int?
+  quotaDuration String    @default("month") // day/week/month
+  features      String[]  // simple array of perks
+  isFree        Boolean   @default(false)
+  visibility    String    @default("public")
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@map("api_pricing")
+}
+
+
 model APIEndpoint {
-  id    String @id @default(auto()) @map("_id") @db.ObjectId
-  apiId String @db.ObjectId
-  api   API    @relation(fields: [apiId], references: [id], onDelete: Cascade)
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  apiId           String   @db.ObjectId
+  api             API      @relation(fields: [apiId], references: [id], onDelete: Cascade)
 
   name            String
   path            String
   method          String
   description     String?
+  authRequired    Boolean  @default(true)
+  rateLimit       Int?
+  visibility      String   @default("public")
+  version         String   @default("v1")
+  category        String?
+  status          String   @default("active")
+  deprecated      Boolean  @default(false)
+
+  // advanced parts
+  parameters      Json?   // [{name,type,required,default,description}]
   exampleRequest  Json?
   exampleResponse Json?
 
-  authRequired Boolean @default(true)
-  rateLimit    Int?
-  visibility   String  @default("public")
-  version      String  @default("v1")
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   @@map("api_endpoints")
 }
+
+
 
 model Category {
   id          String @id @default(auto()) @map("_id") @db.ObjectId

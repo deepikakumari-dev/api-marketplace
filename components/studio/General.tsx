@@ -193,12 +193,23 @@ function General({ api, categories }: {
                         />
                         <p className='text-xs opacity-70'>Markdown is acceptable.</p>
                     </div>
+                    <div className="grid flex-1 gap-2 w-full">
+                        <Label htmlFor="baseUrl" className="">
+                            Base URL
+                        </Label>
+                        <Input
+                            id="baseUrl"
+                            name="baseUrl"
+                            value={formData.baseUrl}
+                            onChange={(e) => handleFieldChange(e)}
+                        />
+                    </div>
 
                     <div className='bg-gray-100 p-2 rounded'>
                         <h2 className='font-semibold text-lg '>Visibility</h2>
-                        <p className='text-xs opacity-70'>Make your API public or private and change its base URL.</p>
+                        <p className='text-xs opacity-70'>Make your API public or private and change its base URL. Base URL and at least one endpoint is required to make an API public.</p>
                         <div className='flex items-center space-x-2 my-5'>
-                            <Switch id="visibility" checked={formData.isPublic} onCheckedChange={(val) => {
+                            <Switch id="visibility" disabled={!formData.baseUrl} checked={formData.isPublic} onCheckedChange={(val) => {
                                 setChanged(true)
                                 setFormData(prev => ({ ...prev, isPublic: val }))
                             }} />

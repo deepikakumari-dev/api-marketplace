@@ -65,3 +65,37 @@ export const getAPIDetails = async (slug: string) => {
         return e.message
     }
 }
+
+export const getAPIEndpoints = async (slug: string) => {
+try {
+        const endpoints = await prisma.aPIEndpoint.findMany({
+            where: {
+                api: {
+                    slug
+                }
+            }
+        })
+        return endpoints
+    } catch (e: any) {
+        return e.message
+    }
+}
+
+export const getFullAPIDetails = async (slug: string) => {
+    try {
+        const api = await prisma.aPI.findUnique({
+            where: {
+                slug
+            }, 
+            include: {
+                endpoints: true,
+                pricingPlans: true,
+                organization: true,
+                category: true
+            }
+        })
+        return api
+    } catch (e: any) {
+        return e.message
+    }
+}

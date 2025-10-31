@@ -74,7 +74,7 @@ function Header({ orgs }: {
               <Button>Signin</Button>
             </Link>
               : status == "authenticated" ? <div className='flex gap-3 items-center'>
-                <Select defaultValue={session?.user.activeOrgId} onValueChange={(value) => {
+                <Select disabled={pathname.includes('studio')} defaultValue={session?.user.activeOrgId} onValueChange={(value) => {
                   changeOrg(value)
                 }}>
                   <SelectTrigger className="w-[180px]">

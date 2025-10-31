@@ -1,5 +1,5 @@
 'use client'
-import { ChartArea, Globe, Settings } from 'lucide-react'
+import { ChartArea, DollarSign, Globe, ListTree, Settings } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React from 'react'
@@ -10,6 +10,8 @@ function StudioSidebar({slug}:{
   const pathname = usePathname()
   const navs = [
     { name: 'Hub Listing', slug: '/apis/' + slug + '/studio/general', logo: <Globe size={20} /> },
+    { name: 'Endpoints', slug: '/apis/' + slug + '/studio/endpoints', logo: <ListTree size={20} /> },
+    { name: 'Pricing', slug: '/apis/' + slug + '/studio/pricing', logo: <DollarSign size={20} /> },
     { name: 'Analytics', slug: '/apis/' + slug + '/studio/analytics', logo: <ChartArea size={20} /> },
     { name: 'Settings', slug: '/apis/' + slug + '/studio/settings', logo: <Settings size={20} /> },
   ]

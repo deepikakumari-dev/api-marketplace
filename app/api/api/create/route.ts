@@ -19,6 +19,16 @@ export async function POST(req: NextRequest) {
             );
         }
 
+        const existing = await prisma.aPI.findUnique({
+            where: {
+                slug
+            }
+        })
+
+        if (existing) {
+            return NextResponse.json({success: false, error: "This slug is already taken, please update it :("})
+        }
+
         const data = await prisma.aPI.create({
             data: {
                 name,
