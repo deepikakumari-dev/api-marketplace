@@ -14,7 +14,7 @@ function TopAPIs({ topAPIs }: {
         {!topAPIs || (topAPIs && topAPIs.length === 0) && (
           <p className='opacity-70 text-sm text-center'>No featured APIs found.</p>
         )}
-        {(topAPIs || []).map((a, i) => <Link href={'/apis/' + a.id}>
+        {(topAPIs || []).map((a, i) => <Link href={'/apis/' + a.slug}>
           <Card key={i} className='shadow-none rounded gap-2 py-2 max-w-md'>
             <CardHeader className='px-0'>
               <div className='px-2 w-fit'>

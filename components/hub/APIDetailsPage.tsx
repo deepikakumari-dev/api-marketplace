@@ -10,10 +10,16 @@ import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { toast } from 'sonner'
 import { Loader2, SendHorizonal, ShieldCheck, Clock, Zap, Star } from 'lucide-react'
+import { notFound } from 'next/navigation'
+import NotFound from '@/app/not-found'
 
 export default function APIDetailsPage({ api }: { api: any }) {
   const [activeEndpoint, setActiveEndpoint] = useState<any | null>(null)
   const [loading, setLoading] = useState(false)
+
+  if (!api) {
+    return NotFound()
+  }
 
   const handleDemo = async (ep: any) => {
     setActiveEndpoint(ep)
@@ -35,8 +41,8 @@ export default function APIDetailsPage({ api }: { api: any }) {
       <div className='flex flex-col md:flex-row gap-6 items-center justify-between'>
         <div className='flex items-center gap-4'>
             <img
-              src={api.logo || `https://whatsyour.info/api/v1/avatar/${api.name}`}
-              alt={api.name}
+              src={api?.logo || `https://whatsyour.info/api/v1/avatar/${api?.name}`}
+              alt={api?.name}
               width={64}
               height={64}
               className='rounded-xl border'
