@@ -1,17 +1,19 @@
 import StudioSidebar from '@/components/studio/Sidebar'
 import React from 'react'
 
-function layout({children}: {
-    children: React.ReactNode
+async function layout({ children, params }: {
+    children: React.ReactNode,
+    params: { slug: string }
 }) {
-  return (
-    <div className='flex'>
-        <StudioSidebar />
-        <div className='container mx-auto'>
-            {children}
+    const { slug } = await params
+    return (
+        <div className='flex'>
+            <StudioSidebar slug={slug} />
+            <div className='container mx-auto'>
+                {children}
+            </div>
         </div>
-    </div>
-  )
+    )
 }
 
 export default layout

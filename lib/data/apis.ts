@@ -52,3 +52,16 @@ export const rankAPIs = async () => {
         return []
     }
 }
+
+export const getAPIDetails = async (slug: string) => {
+    try {
+        const api = await prisma.aPI.findUnique({
+            where: {
+                slug
+            }
+        })
+        return api
+    } catch (e: any) {
+        return e.message
+    }
+}

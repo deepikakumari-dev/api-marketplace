@@ -41,7 +41,7 @@ function Header({ orgs }: {
 
   const userProfile = <div className="w-10 h-10 rounded-full border overflow-hidden flex items-center justify-center cursor-pointer">
     <img
-      src="https://flowbite-react.com/favicon.svg"
+      src={session?.user.image|| `https://whatsyour.info/api/v1/avatar/${session?.user.name}`}
       alt=""
       className="max-w-full max-h-full object-contain"
     />
@@ -84,7 +84,7 @@ function Header({ orgs }: {
                     <SelectGroup>
                       {orgs.map((org, i) => (<SelectItem key={i} value={org.organizationId}><div className="w-6 h-6 rounded-full border overflow-hidden flex items-center justify-center cursor-pointer">
                         <img
-                          src={org.organization.image || "https://flowbite-react.com/favicon.svg"}
+                          src={org.organization.image || `https://whatsyour.info/api/v1/avatar/${org.organization.name}`}
                           alt=""
                           className="max-w-full max-h-full object-contain"
                         />

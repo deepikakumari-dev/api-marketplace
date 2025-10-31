@@ -156,7 +156,7 @@ function CreateOrgPage({ orgs }: {
                         {image && <span onClick={() => setImage('')} className="z-50 absolute top-0 rounded bg-white p-0.5 right-[-5px]"><X className="h-3" /></span>}
                         <div
                             onClick={handleimageSelect} className="h-20 w-20 rounded border cursor-pointer relative ">
-                            {uploading ? <Loader2 className={"flex items-center justify-center w-full h-full animate-spin"} size={14} /> : <img src={image || 'https://flowbite-react.com/favicon.svg'} className="h-full w-full object-contain" alt="post_image" />}
+                            {uploading ? <Loader2 className={"flex items-center justify-center w-full h-full animate-spin"} size={14} /> : <img src={image || `https://whatsyour.info/api/v1/avatar/${formData.name || 'DKAPI'}`} className="h-full w-full object-contain" alt="post_image" />}
                         </div>
                         <input
                             id="image"
