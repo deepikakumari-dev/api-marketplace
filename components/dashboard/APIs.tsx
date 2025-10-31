@@ -95,7 +95,7 @@ function APIs({ orgs, categories }: {
             }
             toast.success('API created successfully!!!')
             setIsOpen(false)
-            router.push('/apis/' + data.data.slug)
+            router.push('/apis/' + data.data.slug + '/studio')
         } catch (e: any) {
             toast.error('Error occurred :(', { description: e.message })
         } finally {
@@ -174,7 +174,7 @@ function APIs({ orgs, categories }: {
                                                     <SelectGroup>
                                                         {orgs.map((org, i) => (<SelectItem key={i} value={org.organizationId}><div className="w-6 h-6 rounded-full border overflow-hidden flex items-center justify-center cursor-pointer">
                                                             <img
-                                                                src={org.organization.image || "https://flowbite-react.com/favicon.svg"}
+                                                                src={org.organization.image  || `https://whatsyour.info/api/v1/avatar/${org.organization.name}`}
                                                                 alt=""
                                                                 className="max-w-full max-h-full object-contain"
                                                             />

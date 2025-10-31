@@ -96,6 +96,6 @@ export const getFullAPIDetails = async (slug: string) => {
         })
         return api
     } catch (e: any) {
-        return e.message
+        return null
     }
 }
